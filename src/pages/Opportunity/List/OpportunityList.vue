@@ -76,6 +76,7 @@ export default {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         })
+        location.reload();
     },
 
     async changeStatus(item, status) {
