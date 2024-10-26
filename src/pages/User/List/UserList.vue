@@ -20,7 +20,7 @@
               @click="editItem(item)"
           >Edit
           </button>
-          <button v-if="item.roles && item.roles.length > 0 && item.roles.includes('MANAGER')" class="btn btn-danger btn-sm me-2"
+          <button class="btn btn-danger btn-sm me-2"
                   @click="dialogs.setRole = true;selectedItem = item">SetRole
           </button>
         </td>

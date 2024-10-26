@@ -46,7 +46,6 @@ export default {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
       });
-      console.log('Role set successfully');
       this.$emit('submit')
     }
   },

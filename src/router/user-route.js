@@ -1,6 +1,5 @@
 import List from "@/pages/User/List/UserList.vue";
 
-console.log(1);
 const userRoute =[
     {
         path: '/user/list',
