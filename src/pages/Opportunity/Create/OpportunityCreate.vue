@@ -43,7 +43,7 @@ export default {
                   },
               }
           );
-          alert('Opportunity created successfully!');
+      this.$router.push('/list');
       }
     },
 };

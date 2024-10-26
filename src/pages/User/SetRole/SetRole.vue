@@ -4,7 +4,7 @@
     <div class="form-group">
       <label for="roleSelect">Select Role</label>
       <select v-model="selectedRole" id="roleSelect" class="form-control">
-        <option v-for="role in roles" :key="role.id" :value="role.id">
+        <option v-for="role in roles" :key="role.id" :value="role.enum">
           {{ role.name }}
         </option>
       </select>
@@ -15,10 +15,11 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "SetRole",
   props: {
-    selectedItem: {}
+    selectedItem: Object
   },
   data() {
     return {
@@ -29,7 +30,7 @@ export default {
           name: "Manager"
         },
         {
-          id: 1,
+          id: 2,
           enum: "USER",
           name: "User"
         }
@@ -39,14 +40,20 @@ export default {
   },
   methods: {
     async setRole() {
-      await axios.post('http://localhost:8000/api/user-role/set-role', {
-        user_id: this.selectedItem?.id,
-        role: this.selectedRole,
+      try {
+        await axios.post('http://localhost:8000/api/user-role/set-role', {
+          user_id: this.selectedItem?.id,
+          role: this.selectedRole,
+        }, {
           headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-      });
-      this.$emit('submit')
+        });
+        this.$emit('submit');
+        this.$emit('refresh');
+      } catch (error) {
+        console.error('Error setting role:', error);
+      }
     }
   },
 };

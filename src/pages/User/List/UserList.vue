@@ -6,7 +6,7 @@
       <tr>
         <th>Name</th>
         <th>Email</th>
-          <th>Role</th>
+        <th>Role</th>
       </tr>
       </thead>
       <tbody>
@@ -15,32 +15,26 @@
         <td>{{ item.email }}</td>
         <td>{{ item.roles[0]?.role }}</td>
         <td>
-          <button
-              class="btn btn-warning btn-sm me-2"
-              @click="editItem(item)"
-          >Edit
-          </button>
-          <button class="btn btn-danger btn-sm me-2"
-                  @click="dialogs.setRole = true;selectedItem = item">SetRole
-          </button>
+          <button class="btn btn-danger btn-sm me-2" @click="openSetRoleModal(item)">Set Role</button>
         </td>
       </tr>
       </tbody>
     </table>
-      <div class="modal fade" id="setRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <set-role @submit="dialogs.setRole = false" :selected-item="selectedItem"/>
-      </div>
+    <set-role
+        v-if="selectedItem && dialogs.setRole"
+        :selected-item="selectedItem"
+        @submit="closeSetRoleModal"
+        @refresh="fetchUserList"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
-import * as bootstrap from 'bootstrap';
 import SetRole from "@/pages/User/SetRole/SetRole.vue";
 
 export default {
-    components: {SetRole},
+  components: { SetRole },
 
   data() {
     return {
@@ -49,40 +43,36 @@ export default {
       },
       items: [],
       selectedItem: null,
-      currentUser: null,
-      status: "NEW",
     };
   },
   methods: {
-    async editItem(itemId) {
-      await axios.put(`http://localhost:8000/api/user/${itemId}/update`, {
-          headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-      })
+    openSetRoleModal(item) {
+      this.selectedItem = item;
+      this.dialogs.setRole = true; // Open Set Role modal
     },
-    showModal() {
-        const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-        myModal.show();
+    closeSetRoleModal() {
+      this.dialogs.setRole = false;
+      this.selectedItem = null; // Reset selected item
+    },
+    async fetchUserList() {
+      try {
+        const res = await axios.get('http://localhost:8000/api/user/list', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        this.items = res.data.data;
+      } catch (error) {
+        console.error('Error fetching User list:', error);
+      }
     },
   },
   async mounted() {
-    try {
-      const res = await axios.get('http://localhost:8000/api/user/list',{
-          headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-      });
-      this.items = res.data.data;
-    } catch (error) {
-      console.error('Error fetching User list:', error);
-    }
-  }
-
-}
-;
+    this.fetchUserList();
+  },
+};
 </script>
 
 <style scoped>
-
+/* Add any additional styles here */
 </style>
