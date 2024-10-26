@@ -12,6 +12,7 @@
         <th>Related Customer</th>
         <th>Cost</th>
         <th>Status</th>
+          <th>CreatedBy</th>
         <th>Actions</th>
       </tr>
       </thead>
@@ -21,20 +22,25 @@
         <td>{{ item.related_customer }}</td>
         <td>{{ item.cost }}</td>
         <td>{{ item.status }}</td>
+          <td>{{ item.createdBy.name }}</td>
         <td>
-          <button
-                  v-if="item.createdBy && item.createdBy.roles && item.createdBy.roles.includes('MANAGER') || item.created_by_id === currentUser.id"
-              class="btn btn-warning btn-sm me-2"
-              @click="editItem(item)"
-          >Edit
-          </button>
+            <button
+                    v-if="(item.createdBy && item.createdBy.roles && item.createdBy.roles.some(role => role.role === 'MANAGER')) || item.created_by_id === currentUser.id"
+                    class="btn btn-warning btn-sm me-2"
+                    @click="editItem(item)"
+            >
+                Edit
+            </button>
           <button v-if="item.status !=='WIN'||item.status !=='LOSE'" class="btn btn-danger btn-sm me-2"
                   @click="deleteItem(item.id)">Delete
           </button>
-          <button v-if="item.createdBy && item.createdBy.roles && item.createdBy.roles.role ==='MANAGER'" class="btn btn-info btn-sm"
-                  @click="changeStatus(item,status)">
-            Change Status
-          </button>
+            <button
+                    v-if="item.createdBy && item.createdBy.roles && item.createdBy.roles.some(role => role.role === 'MANAGER')"
+                    class="btn btn-info btn-sm"
+                    @click="changeStatus(item, status)"
+            >
+                Change Status
+            </button>
         </td>
       </tr>
       </tbody>
