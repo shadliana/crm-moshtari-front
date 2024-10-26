@@ -14,7 +14,6 @@
           <option value="NEW">New</option>
           <option value="WIN">Win</option>
           <option value="LOSE">Lose</option>
-          <!-- Add other statuses as needed -->
         </select>
         <button type="submit" class="btn btn-primary">Search</button>
       </form>
