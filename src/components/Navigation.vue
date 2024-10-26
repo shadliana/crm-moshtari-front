@@ -7,7 +7,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <router-link to="/list" class="nav-link">
+          <router-link v-if="isLoggedIn" to="/list" class="nav-link">
          List
           </router-link>
           <router-link to="/register" class="nav-link"> Sing Up
@@ -21,7 +21,11 @@
   </nav>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
-  name: "NavbarForm"
+  name: "NavbarForm",
+    computed: {
+        ...mapState(['isLoggedIn'])
+    }
 }
 </script>
